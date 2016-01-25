@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bhz.demo.dao.CardDAO">
+	<insert id="addCard" parameterType="com.bhz.demo.entity.Card">
+		INSERT INTO card(card_no,card_type,amount) values(#{cardNo,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{amount,jdbcType=DECIMAL})
+	</insert>
+	<select id="getCard" resultType="com.bhz.demo.entity.Card" parameterType="java.lang.String">
+		SELECT * FROM card where card_no=#{cardNo}
+	</select>
+</mapper>
