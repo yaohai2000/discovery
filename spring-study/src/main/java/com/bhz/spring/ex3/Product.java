@@ -2,7 +2,7 @@ package com.bhz.spring.ex3;
 
 import java.math.BigDecimal;
 
-public class Product {
+public class Product implements java.io.Serializable{
 	private BigDecimal price;
 	private String id;
 	private String name;
@@ -23,6 +23,11 @@ public class Product {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String toString(){
+		return "Product ID [ " + this.getId() + " ] Product Name [ " + this.getName() + " ] Product Price [ " + this.getPrice().toString() + " ]";
 	}
 	
 }
