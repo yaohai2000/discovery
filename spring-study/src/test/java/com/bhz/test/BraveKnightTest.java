@@ -2,10 +2,12 @@ package com.bhz.test;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.test.context.ContextConfiguration;
 
 import com.bhz.spring.ex1.BraveKnight;
 import com.bhz.spring.ex1.Quest;
 
+@ContextConfiguration()
 public class BraveKnightTest {
 
 	@Test

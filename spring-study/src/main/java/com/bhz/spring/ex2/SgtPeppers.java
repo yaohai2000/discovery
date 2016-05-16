@@ -2,7 +2,7 @@ package com.bhz.spring.ex2;
 
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class SgtPeppers implements CompactDisc {
 
 	private String title = "Sgt. Pepper's Lonely Hearts Club Band";
