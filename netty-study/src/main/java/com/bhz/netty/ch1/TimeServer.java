@@ -16,6 +16,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.CharsetUtil;
 
 public class TimeServer {
@@ -31,6 +33,8 @@ public class TimeServer {
 	
 					@Override
 					protected void initChannel(SocketChannel sc) throws Exception {
+						sc.pipeline().addLast(new LineBasedFrameDecoder(1024));
+						sc.pipeline().addLast(new StringDecoder());
 						sc.pipeline().addLast(new TimeServerHandler());
 					}
 					
@@ -64,18 +68,21 @@ public class TimeServer {
 
 @ChannelHandler.Sharable
 class TimeServerHandler extends ChannelHandlerAdapter{
-	
+	private int counter = 0;
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-		ByteBuf b = (ByteBuf)msg;
-		String cmd = b.toString(CharsetUtil.UTF_8);
+//		ByteBuf b = (ByteBuf)msg;
+//		String cmd = b.toString(CharsetUtil.UTF_8);
+		String cmd = (String)msg;
+//		cmd = cmd.substring(0, cmd.indexOf(System.getProperty("line.separator")));
 		String result = sdf.format(System.currentTimeMillis());
 		if(cmd.toLowerCase().equals("query time")){
-			ctx.write(Unpooled.copiedBuffer(result,CharsetUtil.UTF_8));
+			counter++;
+			ctx.writeAndFlush(Unpooled.copiedBuffer(result + " [The counter is :" + counter + "]" + System.getProperty("line.separator"),CharsetUtil.UTF_8));
 		}else{
-			ctx.write(Unpooled.copiedBuffer("Bad Command",CharsetUtil.UTF_8));
+			ctx.writeAndFlush(Unpooled.copiedBuffer("Bad Command" + System.getProperty("line.separator"),CharsetUtil.UTF_8));
 		}
 	}
 

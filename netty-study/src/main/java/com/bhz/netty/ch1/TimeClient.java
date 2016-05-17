@@ -12,6 +12,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LineBasedFrameDecoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.CharsetUtil;
 
 public class TimeClient {
@@ -26,6 +28,8 @@ public class TimeClient {
 	
 					@Override
 					protected void initChannel(SocketChannel sc) throws Exception {
+						sc.pipeline().addLast(new LineBasedFrameDecoder(1024));
+						sc.pipeline().addLast(new StringDecoder());
 						sc.pipeline().addLast(new TimeClientHandler(cmd));
 					}
 					
@@ -47,21 +51,24 @@ public class TimeClient {
 	}
 }
 
-class TimeClientHandler extends SimpleChannelInboundHandler<ByteBuf>{
+class TimeClientHandler extends SimpleChannelInboundHandler<String>{
 	final String msg;
 	
 	public TimeClientHandler(String cmd){
 		this.msg = cmd;
 	}
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
-		System.out.println(msg.toString(CharsetUtil.UTF_8));
+	protected void messageReceived(ChannelHandlerContext ctx, String msg) throws Exception {
+//		System.out.println(msg.toString(CharsetUtil.UTF_8));
+		System.out.println(msg);
 	}
 	
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		System.out.println("Sending message to server: " + msg);
-		ctx.writeAndFlush(Unpooled.copiedBuffer(msg,CharsetUtil.UTF_8));
+		for(int i=0;i<100;i++){
+			System.out.println("Sending message to server: " + msg + i);
+			ctx.writeAndFlush(Unpooled.copiedBuffer(msg + System.getProperty("line.separator"),CharsetUtil.UTF_8));
+		}
 	}
 
 	@Override
