@@ -11,7 +11,9 @@ public class OneToOneProducer {
 	private final String QUEUE_NAME="test";
 	private void sendMessage() throws IOException, TimeoutException{
 		ConnectionFactory cf = new ConnectionFactory();
-		cf.setHost("172.16.26.160");
+		cf.setHost("192.168.1.206");
+		cf.setUsername("yaoh");
+		cf.setPassword("yaoh");
 		Connection con = cf.newConnection();
 		Channel channel = con.createChannel();
 		
