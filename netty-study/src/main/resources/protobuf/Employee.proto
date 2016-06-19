@@ -1,0 +1,15 @@
+option java_package="com.bhz.netty.protobuf";
+option java_outer_classname="EmployeeProto";
+option optimize_for=LITE_RUNTIME;
+
+message Employee{
+	required string id=1;
+	required string name=2;
+	optional int32 age=3;
+	optional int32 sex=4;
+	message Department{
+		required string departId = 1;
+		required string departName=2;
+	}
+	optional Department depart = 5;
+}

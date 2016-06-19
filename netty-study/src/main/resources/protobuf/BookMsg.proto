@@ -1,0 +1,21 @@
+option java_package="com.bhz.netty.protobuf";
+option java_outer_classname="BookProto";
+option optimize_for=LITE_RUNTIME;
+
+message BookMsg{
+	optional Book books = 1;
+	optional Author author =2;
+}
+
+message Book{
+	optional string bookId = 1;
+	optional string bookName = 2;
+	optional float price = 3;
+	optional Author author = 4;
+}
+
+message Author{
+	optional string authorName = 1;
+	optional string address = 2;
+	repeated Book books = 3;
+}
