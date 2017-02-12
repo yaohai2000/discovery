@@ -4,9 +4,11 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.CharsetUtil;
+import io.netty.util.ReferenceCountUtil;
 
-public class MyLogicHandler extends ChannelHandlerAdapter {
+public class MyLogicHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -29,6 +31,7 @@ public class MyLogicHandler extends ChannelHandlerAdapter {
 		ByteBuf b = msgBuf.readBytes((int)(size-4));
 		System.out.println(new String(b.array()));
 		ctx.writeAndFlush(b);
+		ReferenceCountUtil.release(msg);
 	}
 
 }

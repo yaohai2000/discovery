@@ -58,7 +58,7 @@ class TimeClientHandler extends SimpleChannelInboundHandler<String>{
 		this.msg = cmd;
 	}
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, String msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
 //		System.out.println(msg.toString(CharsetUtil.UTF_8));
 		System.out.println(msg);
 	}

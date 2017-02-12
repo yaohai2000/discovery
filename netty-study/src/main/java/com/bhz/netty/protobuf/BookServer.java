@@ -8,6 +8,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -18,6 +19,7 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.util.ReferenceCountUtil;
 
 public class BookServer {
 	private void bind() throws Exception{
@@ -58,7 +60,7 @@ public class BookServer {
 }
 
 
-class BookMsgHandler extends ChannelHandlerAdapter{
+class BookMsgHandler extends ChannelInboundHandlerAdapter{
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -74,6 +76,7 @@ class BookMsgHandler extends ChannelHandlerAdapter{
 		}else{
 			throw new Exception("Invalid Message!");
 		}
+		ReferenceCountUtil.release(msg);
 	}
 
 	@Override

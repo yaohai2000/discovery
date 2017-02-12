@@ -7,6 +7,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
@@ -17,6 +18,7 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.ReferenceCountUtil;
 
 public class DelimiterServer {
 	public static void main(String[] args) throws Exception{
@@ -60,7 +62,7 @@ public class DelimiterServer {
 	}
 }
 
-class DelimiterServerHandler extends ChannelHandlerAdapter{
+class DelimiterServerHandler extends ChannelInboundHandlerAdapter{
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -72,6 +74,7 @@ class DelimiterServerHandler extends ChannelHandlerAdapter{
 	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 		String m = (String)msg;
 		System.out.println(m);
+		ReferenceCountUtil.release(msg);
 	}
 	
 }

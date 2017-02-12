@@ -49,7 +49,7 @@ public class BookClient {
 class BookMsgClientHandler extends SimpleChannelInboundHandler<BookProto.BookMsg>{
 
 	@Override
-	protected void messageReceived(ChannelHandlerContext ctx, BookMsg msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, BookMsg msg) throws Exception {
 		if(msg instanceof BookProto.BookMsg){
 			BookProto.BookMsg bs = (BookProto.BookMsg)msg;
 			System.out.println(bs.getBooks().getBookName() + "  " + bs.getAuthor().getAuthorName()); 

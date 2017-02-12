@@ -2,11 +2,11 @@ package com.bhz.netty.ch4;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.AttributeKey;
 
-public class MySenderHandler extends ChannelHandlerAdapter {
+public class MySenderHandler extends SimpleChannelInboundHandler<AttributeKey<Integer>> {
 	AttributeKey<Integer> key ;
 	public MySenderHandler(AttributeKey<Integer> key) {
 		this.key = key;
@@ -25,7 +25,7 @@ public class MySenderHandler extends ChannelHandlerAdapter {
 	}
 
 	@Override
-	public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+	public void channelRead0(ChannelHandlerContext ctx, AttributeKey<Integer> msg) throws Exception {
 		System.out.println("[ " + ctx.channel().attr(key).get() + " ]" + msg);
 	}
 	

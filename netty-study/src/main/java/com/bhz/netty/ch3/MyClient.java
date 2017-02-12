@@ -12,6 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -26,7 +27,7 @@ public class MyClient {
 
 				@Override
 				protected void initChannel(SocketChannel ch) throws Exception {
-					ch.pipeline().addLast(new ChannelHandlerAdapter(){
+					ch.pipeline().addLast(new SimpleChannelInboundHandler<ByteBuf>(){
 
 						@Override
 						public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -46,6 +47,13 @@ public class MyClient {
 							b.writeBytes(b2);
 //							b.writeDouble(34.56);
 							ctx.writeAndFlush(b);
+						}
+
+						@Override
+						protected void channelRead0(ChannelHandlerContext ctx, ByteBuf msg) throws Exception {
+							// TODO Auto-generated method stub
+							System.out.println("Channel Read 0");
+							ctx.channel().close();
 						}
 
 //						@Override

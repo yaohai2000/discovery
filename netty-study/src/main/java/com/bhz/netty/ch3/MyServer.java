@@ -1,5 +1,6 @@
 package com.bhz.netty.ch3;
 
+import java.nio.charset.Charset;
 import java.util.List;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -9,6 +10,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -18,6 +20,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.ReplayingDecoder;
+import io.netty.util.ReferenceCountUtil;
 
 public class MyServer {
 	
@@ -77,11 +80,14 @@ public class MyServer {
 		
 	}
 	
-	class MyHandler extends ChannelHandlerAdapter{
+	class MyHandler extends ChannelInboundHandlerAdapter{
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			System.out.println(msg);
+			ReferenceCountUtil.release(msg);
+			ByteBuf bb = Unpooled.copiedBuffer("Hello",Charset.forName("utf-8"));
+			ctx.writeAndFlush(bb);
 		}
 
 		@Override
